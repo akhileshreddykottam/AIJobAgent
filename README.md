@@ -27,7 +27,7 @@ $env:GEMINI_API_KEY = "your-api-key"
 streamlit run app.py
 ```
 
-The model defaults to `gemini-3.6-flash`. To select another model, set `GEMINI_MODEL` in the run configuration or shell before launching the app. If AI analysis fails, the app provides a safe diagnostic for missing configuration, API-key access, model availability, quota, or network errors without displaying provider error details; local job matches remain visible.
+The model defaults to `gemini-3.5-flash-lite`. To select another model, set `GEMINI_MODEL` in the run configuration or shell before launching the app. If AI analysis fails, the app provides a safe diagnostic for missing configuration, API-key access, model availability, quota, or network errors without displaying provider error details; local job matches remain visible.
 
 AI analysis is optional: local job matching still works if the API key is missing or Gemini is temporarily unavailable.
 

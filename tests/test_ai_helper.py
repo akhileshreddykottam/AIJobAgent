@@ -124,7 +124,7 @@ class AIHelperTests(unittest.TestCase):
 
     def test_model_name_has_a_default(self):
         with patch.dict(os.environ, {}, clear=True):
-            self.assertEqual(get_model_name(), "gemini-3.8-flash")
+            self.assertEqual(get_model_name(), "gemini-3.5-flash-lite")
 
 
 if __name__ == "__main__":

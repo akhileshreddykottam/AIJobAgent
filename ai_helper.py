@@ -5,7 +5,7 @@ from google.genai import types
 
 REQUEST_TIMEOUT_MS = 20000
 
-DEFAULT_MODEL = "gemini-3.8-flash"
+DEFAULT_MODEL = "gemini-3.5-flash-lite"
 
 
 def create_client():
