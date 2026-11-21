@@ -44,15 +44,15 @@ jobs = [
         "title": "Coding",
         "company": "Oslo Software company",
         "location": "Oslo",
-        "skills": ["communication", "python"],
-        "interests": ["software development", "technology", "problem solving"]
+        "skills": ["communication", "python", "coding"],
+        "interests": ["software development", "technology", "problem solving", "coding"]
     },
     {
         "title": "Coding",
         "company": "Asker Software company",
         "location": "Asker",
-        "skills": ["communication", "python", "technology", "team work"],
-        "interests": ["software development", "technology", "team collaboration"]
+        "skills": ["communication", "python", "technology", "team work", "coding"],
+        "interests": ["software development", "technology", "team collaboration", "coding"]
     },
     {
         "title": "Data Analyst",
@@ -415,29 +415,29 @@ jobs = [
         "title": "Junior Software Developer",
         "company": "Example Fjord Software",
         "location": "Bergen",
-        "skills": ["typescript", "git", "debugging"],
-        "interests": ["software development", "open source", "problem solving"]
+        "skills": ["typescript", "git", "debugging", "coding"],
+        "interests": ["software development", "open source", "problem solving", "coding"]
     },
     {
         "title": "Backend Developer",
         "company": "Sample Northern Code",
         "location": "Trondheim",
-        "skills": ["java", "sql", "rest apis"],
-        "interests": ["software architecture", "databases", "technology"]
+        "skills": ["java", "sql", "rest apis", "coding"],
+        "interests": ["software architecture", "databases", "technology", "coding"]
     },
     {
         "title": "Full Stack Developer",
         "company": "Example Stack Studio",
         "location": "Oslo",
-        "skills": ["javascript", "react", "node.js"],
-        "interests": ["web development", "digital products", "software development"]
+        "skills": ["javascript", "react", "node.js", "coding"],
+        "interests": ["web development", "digital products", "software development", "coding"]
     },
     {
         "title": "Mobile App Developer",
         "company": "Sample App Harbour",
         "location": "Stavanger",
-        "skills": ["kotlin", "swift", "mobile development"],
-        "interests": ["mobile apps", "user experience", "technology"]
+        "skills": ["kotlin", "swift", "mobile development", "coding"],
+        "interests": ["mobile apps", "user experience", "technology", "coding"]
     },
     {
         "title": "Software Tester",
@@ -450,22 +450,22 @@ jobs = [
         "title": "Machine Learning Engineer",
         "company": "Sample Neural Works",
         "location": "Trondheim",
-        "skills": ["python", "machine learning", "statistics"],
-        "interests": ["artificial intelligence", "data science", "research"]
+        "skills": ["python", "machine learning", "statistics", "coding"],
+        "interests": ["artificial intelligence", "data science", "research", "coding"]
     },
     {
         "title": "Game Developer",
         "company": "Example Midnight Sun Games",
         "location": "Tromsø",
-        "skills": ["c#", "unity", "game design"],
-        "interests": ["game development", "interactive media", "creativity"]
+        "skills": ["c#", "unity", "game design", "coding"],
+        "interests": ["game development", "interactive media", "creativity", "coding"]
     },
     {
         "title": "Embedded Systems Developer",
         "company": "Sample Circuit Coast",
         "location": "Drammen",
-        "skills": ["c++", "microcontrollers", "electronics"],
-        "interests": ["embedded systems", "robotics", "technology"]
+        "skills": ["c++", "microcontrollers", "electronics", "coding"],
+        "interests": ["embedded systems", "robotics", "technology", "coding"]
     },
     {
         "title": "Registered Nurse",
