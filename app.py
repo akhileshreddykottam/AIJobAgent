@@ -1,6 +1,5 @@
 ﻿import html
-from concurrent.futures import ThreadPoolExecutor
-
+import re
 import streamlit as st
 import httpx
 from google.genai.errors import APIError
@@ -103,21 +102,16 @@ def print_job_result(job, breakdown):
     )
 
 
-def get_ai_analysis(job, breakdown, interests):
-    prompt = f"""
+def _job_block(number, job, breakdown):
+    return f"""=== JOB {number} ===
 Student matching skills:
 {', '.join(breakdown['matched_skills']) or 'None'}
 
 Student interests matching job interests:
 {', '.join(breakdown['matched_interests']) or 'None'}
 
-Match skills only to required skills, and interests only to job interests.
-
 Missing required skills:
 {', '.join(breakdown['missing_skills']) or 'None'}
-
-Student interests:
-{', '.join(interests) or 'None'}
 
 Job title:
 {job['title']}
@@ -127,8 +121,38 @@ Required skills:
 
 Job interests:
 {', '.join(job.get('interests', [])) or 'None'}
+"""
 
-Respond in exactly two lines:
+
+def _split_analyses(text, count):
+    parts = re.split(r"===\s*JOB\s*(\d+)\s*===", text or "")
+    analyses = {}
+    for number, body in zip(parts[1::2], parts[2::2]):
+        analyses[int(number)] = body.strip()
+
+    if not analyses and count == 1:
+        return [(text or "").strip()]
+
+    return [analyses.get(number, "") for number in range(1, count + 1)]
+
+
+def get_ai_analyses(entries, interests):
+    """Analyze several jobs with a single Gemini request to stay within rate limits."""
+    blocks = "\n".join(
+        _job_block(number, job, breakdown)
+        for number, (job, breakdown) in enumerate(entries, start=1)
+    )
+    prompt = f"""
+Student interests:
+{', '.join(interests) or 'None'}
+
+Match skills only to required skills, and interests only to job interests.
+
+Analyze each of the {len(entries)} jobs below separately.
+
+{blocks}
+
+For every job, start with its marker line exactly as written (for example "=== JOB 1 ==="), then respond in exactly two lines:
 
 Why Match:
 <one short sentence explaining why this job is a good match>
@@ -139,7 +163,21 @@ Learn:
 Keep the response concise.
 """
 
-    return generate_response(prompt)
+    return _split_analyses(generate_response(prompt), len(entries))
+
+
+def get_cached_ai_analyses(entries, interests):
+    cache = st.session_state.setdefault("ai_analysis_cache", {})
+    key = (
+        tuple((job["title"], job.get("company"), tuple(breakdown["matched_skills"]),
+               tuple(breakdown["matched_interests"]), tuple(breakdown["missing_skills"]))
+              for job, breakdown in entries),
+        tuple(interests),
+    )
+    if key not in cache:
+        cache[key] = get_ai_analyses(entries, interests)
+
+    return cache[key]
 
 
 def _ai_error_message(error):
@@ -280,28 +318,25 @@ if search_clicked:
         else:
             top_results = results[:3]
 
-            def _analyze(result):
-                try:
-                    return get_ai_analysis(
-                        result["job"],
-                        result["breakdown"],
+            try:
+                with st.spinner("Analyzing matches with AI..."):
+                    analyses = get_cached_ai_analyses(
+                        [(result["job"], result["breakdown"]) for result in top_results],
                         selected_interests,
-                    ), None
-                except Exception as error:
-                    return None, error
-
-            with st.spinner("Analyzing matches with AI..."):
-                with ThreadPoolExecutor(max_workers=len(top_results)) as executor:
-                    analyses = list(executor.map(_analyze, top_results))
+                    )
+                analysis_error = None
+            except Exception as error:
+                analyses = [""] * len(top_results)
+                analysis_error = error
 
             st.subheader(f"Top {len(top_results)} matches")
-            for result, (analysis, error) in zip(top_results, analyses):
+            for result, analysis in zip(top_results, analyses):
                 job = result["job"]
                 with st.container(border=True):
                     print_job_result(job, result["breakdown"])
 
                     st.markdown("**🤖 AI Analysis**")
-                    if error is not None:
-                        st.warning(_ai_error_message(error))
+                    if analysis_error is not None:
+                        st.warning(_ai_error_message(analysis_error))
                     else:
                         st.info(analysis or "AI analysis did not return a response.")
